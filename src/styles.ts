@@ -26,10 +26,10 @@ export const GlobalCss = createGlobalStyle`
     color: ${cores.pretoSuave};
     padding-top: 40px;
   }
-`
 
-export const Contaiener = styled.div`
-  max-width: 1024px;
-  width: 100%;
-  margin: 0 auto;
+  .container {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto;
+  }
 `
