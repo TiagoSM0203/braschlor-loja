@@ -5,8 +5,8 @@ export const cores = {
   verdeEscuro: '#006837',
   verdeClaro: '#A7E3C0',
   branco: '#FFFFFF',
-  azul: '#0072CE',
-  azulClaro: '#E6F4FB',
+  azul: '#1470AF',
+  azulClaro: '#8EB6DC',
   cinzaClaro: '#F5F5F5',
   cinzaMedio: '#6E6E6E',
   pretoSuave: '#1C1C1C',
@@ -22,7 +22,7 @@ export const GlobalCss = createGlobalStyle`
   }
 
   body {
-    background-color: ${cores.branco};
+    background-color: ${cores.cinzaClaro};
     color: ${cores.pretoSuave};
   }
 

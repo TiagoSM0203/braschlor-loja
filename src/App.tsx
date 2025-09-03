@@ -1,5 +1,8 @@
 import Banner from './components/Banner'
 import Header from './components/Header'
+import Marcas from './components/Marcas'
+import Produtos from './components/Produtos'
+import Sobre from './components/SobreNos'
 import { GlobalCss } from './styles'
 
 function App() {
@@ -10,6 +13,9 @@ function App() {
         <Header />
       </div>
       <Banner />
+      <Sobre />
+      <Marcas />
+      <Produtos />
     </>
   )
 }

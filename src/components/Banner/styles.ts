@@ -12,10 +12,15 @@ export const Imagem = styled.div`
   background-size: cover;
   padding-top: 60vh;
   padding-right: 60vw;
+  border-bottom-left-radius: 50% 10%;
+  border-bottom-right-radius: 50% 10%;
+  box-shadow: 1px 9px 45px -24px rgba(0, 0, 0, 0.48);
 
   @media (max-width: 992px) {
     padding: 40px;
     background-position: right;
+    border-bottom-left-radius: 100% 10%;
+    border-bottom-right-radius: 100% 10%;
   }
 
   @media (max-width: 576px) {

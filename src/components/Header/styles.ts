@@ -2,19 +2,35 @@
 import styled from 'styled-components'
 import { cores } from '../../styles'
 
-export const HeaderBar = styled.header`
-  background-color: ${cores.branco};
-  padding: 24px;
-  margin-top: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.12);
-  border-radius: 16px;
-  position: absolute;
+export const HeaderBar = styled.header<{ $scrolled: boolean }>`
+  /* layout base do seu header “flutuante” */
+  position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  z-index: 10;
+  z-index: 1000;
 
+  /* visual */
+  background: ${({ $scrolled }) =>
+    $scrolled ? 'rgba(255, 255, 255, 0.49)' : `${cores.branco}`};
+  backdrop-filter: ${({ $scrolled }) =>
+    $scrolled ? 'saturate(160%) blur(8px)' : 'none'};
+  -webkit-backdrop-filter: ${({ $scrolled }) =>
+    $scrolled ? 'saturate(160%) blur(8px)' : 'none'};
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: ${({ $scrolled }) =>
+    $scrolled ? '0 6px 18px rgba(0,0,0,0.16)' : '0 4px 10px rgba(0,0,0,0.12)'};
+  border: ${({ $scrolled }) =>
+    $scrolled ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent'};
+
+  /* animação suave da transição */
+  transition: background 0.25s ease, backdrop-filter 0.25s ease,
+    box-shadow 0.25s ease, border-color 0.25s ease, padding 0.25s ease;
+
+  /* tipografia/links */
   display: flex;
   align-items: center;
   gap: 16px;
@@ -27,7 +43,7 @@ export const HeaderBar = styled.header`
 
   nav {
     flex: 1;
-    min-width: 0; /* permite o overflow horizontal do menu */
+    min-width: 0; /* permite overflow horizontal do menu */
   }
 
   /* Menu principal */
@@ -38,7 +54,7 @@ export const HeaderBar = styled.header`
   .nav-link {
     padding: 8px 12px;
     font-weight: 500;
-    white-space: nowrap; /* evita quebra esquisita nas labels */
+    white-space: nowrap;
   }
 
   a {
@@ -100,6 +116,7 @@ export const HeaderBar = styled.header`
   @media (max-width: 992px) {
     padding: 16px 20px;
     width: 94%;
+
     img {
       width: 130px;
     }
@@ -113,8 +130,8 @@ export const HeaderBar = styled.header`
       scrollbar-width: none; /* Firefox */
     }
     nav .nav::-webkit-scrollbar {
-      display: none;
-    } /* Chrome/Safari */
+      display: none; /* Chrome/Safari */
+    }
   }
 
   /* ≤ 768px (tablet pequeno) */
@@ -138,22 +155,16 @@ export const HeaderBar = styled.header`
       width: 120px;
     }
 
-    /* empacota: logo / menu scroll / ações à direita */
     .nav.align-items-center {
       gap: 8px;
     }
 
-    /* reduz efeitos de escala p/ evitar "pulos" no layout */
+    /* reduz efeitos de escala p/ evitar “pulos” no layout */
     a:hover {
       transform: none;
     }
     .card-carrinho:hover {
       transform: none;
     }
-
-    /* se quiser esconder itens menos críticos no mobile:
-      .nav .nav-item:nth-child(3),
-      .nav .nav-item:nth-child(5) { display: none; }
-    */
   }
 `
