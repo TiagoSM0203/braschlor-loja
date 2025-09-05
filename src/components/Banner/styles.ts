@@ -87,3 +87,60 @@ export const Fundo = styled.div`
     }
   }
 `
+
+export const Marquee = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 6px 0;
+  margin-bottom: 16px;
+
+  /* máscara para sumir nas bordas, deixando suave */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+`
+
+export const MarqueeTrack = styled.div`
+  display: inline-flex;
+  gap: 1.5rem;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee-left 10s linear infinite;
+
+  span {
+    color: ${cores.branco};
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+  }
+
+  span:hover {
+    opacity: 1;
+  }
+
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(
+        calc(-50% - 1.8em)
+      ); /* metade do conteúdo duplicado */
+    }
+  }
+`
