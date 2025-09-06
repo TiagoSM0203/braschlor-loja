@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Fundo, Imagem, Titulo, Marquee, MarqueeTrack } from './styles'
 
 import bannerImg from '../../assets/images/hero.png'
@@ -31,9 +32,9 @@ const Banner = () => (
         </MarqueeTrack>
       </Marquee>
       <Titulo>Produtos de Limpeza com Qualidade e Preço de Fábrica.</Titulo>
-      <a className="btn btn-success btn-lg" href="#">
+      <Link to="/produtos" className="btn btn-success btn-lg">
         Comprar agora
-      </a>
+      </Link>
     </Fundo>
   </Imagem>
 )

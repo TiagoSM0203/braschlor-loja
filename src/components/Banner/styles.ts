@@ -15,6 +15,7 @@ export const Imagem = styled.div`
   border-bottom-left-radius: 50% 10%;
   border-bottom-right-radius: 50% 10%;
   box-shadow: 1px 9px 45px -24px rgba(0, 0, 0, 0.48);
+  z-index: 1;
 
   @media (max-width: 992px) {
     padding: 40px;

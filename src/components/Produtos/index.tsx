@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect } from 'react'
 import { Carousel, Row, Col, Button } from 'react-bootstrap'
 import { ImagensP, Products, Produto } from './styles'
+import { useCart } from '../../contexts/CardContext'
+import { useNavigate } from 'react-router-dom'
 
 import SabaoAzul5l from '../../assets/images/sabao-azul-5l.png'
 import SabaoAzul2l from '../../assets/images/sabao-azul-2l.png'
@@ -10,6 +12,7 @@ import Branquinho2l from '../../assets/images/branquinho-2l.png'
 import Pretinho4kg from '../../assets/images/pretinho-4kg.png'
 
 type Product = {
+  id: number
   img: string
   title: string
   desc: string
@@ -89,6 +92,7 @@ const Produtos = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const items: Product[] = [
     {
+      id: 1,
       img: SabaoAzul5l,
       title: 'Lava Roupas Líquido Azul 5L',
       desc: 'Limpeza eficiente e alto rendimento.',
@@ -97,6 +101,7 @@ const Produtos = () => {
       alt: 'Lava Roupas Azul 5L',
     },
     {
+      id: 2,
       img: SabaoAzul2l,
       title: 'Lava Roupas Líquido Azul 2L',
       desc: 'Espuma controlada e perfume agradável.',
@@ -105,6 +110,7 @@ const Produtos = () => {
       alt: 'Lava Roupas Azul 2L',
     },
     {
+      id: 3,
       img: Amaciante5l,
       title: 'Amaciante Azul 5L',
       desc: 'Maciez e fragrância prolongada.',
@@ -113,6 +119,7 @@ const Produtos = () => {
       alt: 'Amaciante 5L',
     },
     {
+      id: 4,
       img: AguaSanitaria5l,
       title: 'Água Sanitária 5L',
       desc: 'Branqueia e desinfeta com segurança.',
@@ -121,6 +128,7 @@ const Produtos = () => {
       alt: 'Água Sanitária 5L',
     },
     {
+      id: 5,
       img: Branquinho2l,
       title: 'Branquinho 2L',
       desc: 'Limpador multiuso de alto desempenho.',
@@ -129,6 +137,7 @@ const Produtos = () => {
       alt: 'Branquinho 2L',
     },
     {
+      id: 6,
       img: Pretinho4kg,
       title: 'Limpa Pneu Gel 4Kg',
       desc: 'Brilho intenso e proteção duradoura.',
@@ -137,6 +146,9 @@ const Produtos = () => {
       alt: 'Limpa Pneu 4Kg',
     },
   ]
+
+  const { addItem } = useCart()
+  const navigate = useNavigate()
 
   const slides = useMemo(
     () => chunk(items, itemsPerSlide),
@@ -167,13 +179,16 @@ const Produtos = () => {
               {group.map((prod, i) => (
                 <Col key={i} xs={12} md={6} xl={4} className="d-flex">
                   <Produto className="w-100 d-flex flex-column text-center p-5 h-100">
-                    <ImagensP
-                      src={prod.img}
-                      alt={prod.alt ?? prod.title}
-                      className="img-fluid mx-auto"
-                    />
-                    <h3 className="mt-3 fs-5 product-title">{prod.title}</h3>
-                    <p className="mb-2 fs-6 product-title">{prod.desc}</p>
+                    <div className="img-wrap">
+                      <ImagensP
+                        src={prod.img}
+                        alt={prod.alt ?? prod.title}
+                        className="img-fluid mx-auto"
+                      />
+                    </div>
+
+                    <h3 className="mt-1 product-title">{prod.title}</h3>
+                    <p className="mb-2 product-title">{prod.desc}</p>
 
                     <div className="mt-auto">
                       {typeof prod.priceFrom === 'number' &&
@@ -182,13 +197,13 @@ const Produtos = () => {
                             className="text-muted"
                             style={{
                               textDecoration: 'line-through',
-                              fontSize: '0.9rem',
+                              fontSize: '.9rem',
                             }}
                           >
                             {formatBRL(prod.priceFrom)}
                           </div>
                         )}
-                      <strong className="fs-4">{formatBRL(prod.price)}</strong>
+                      <strong>{formatBRL(prod.price)}</strong>
                     </div>
 
                     <div className="mt-3 d-flex justify-content-center gap-2">
@@ -196,9 +211,17 @@ const Produtos = () => {
                         variant="success"
                         size="sm"
                         className="action-btn"
-                        onClick={() =>
-                          alert(`Adicionado ao carrinho: ${prod.title}`)
-                        }
+                        onClick={() => {
+                          addItem(
+                            {
+                              id: prod.id,
+                              title: prod.title,
+                              price: prod.price,
+                              img: prod.img,
+                            },
+                            1
+                          )
+                        }}
                       >
                         Adicionar ao Carrinho
                       </Button>
@@ -206,7 +229,7 @@ const Produtos = () => {
                         variant="outline-success"
                         size="sm"
                         className="action-btn"
-                        onClick={() => alert(`Compra imediata: ${prod.title}`)}
+                        onClick={() => navigate(`/produto/${prod.id}`)}
                       >
                         Comprar
                       </Button>

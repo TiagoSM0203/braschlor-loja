@@ -1,3 +1,4 @@
+// styles.ts
 import styled from 'styled-components'
 import { cores } from '../../styles'
 
@@ -5,6 +6,7 @@ export const Products = styled.div`
   max-width: 90vw;
   margin: 0 auto;
   width: 100%;
+
   h1 {
     color: ${cores.verde};
     font-family: 'Anton', sans-serif;
@@ -16,102 +18,97 @@ export const Products = styled.div`
     color: ${cores.verdeClaro};
   }
 
-  /* Permite que os controles "saíam" do box do carousel */
+  /* mantém o Carousel saudável */
   .carousel {
     overflow: visible;
   }
 
-  /* Cor e posição dos botões de navegação */
+  /* setas (se usar no desktop) — opcional */
   .carousel-control-prev,
   .carousel-control-next {
-    width: auto; /* não ocupar 50% */
-    opacity: 1; /* visíveis */
-    color: ${cores.verdeEscuro}; /* cor dos SVGs (via currentColor) */
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: auto;
+    opacity: 1;
+    color: ${cores.verdeEscuro};
+    transition: transform 0.2s ease;
   }
-
-  /* Ícone SVG (span que passamos via prevIcon/nextIcon) */
-  .rb-chevron {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 999px;
-    background: #ffffffcc; /* bolha clara para destacar do fundo */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-
-  .carousel-control-prev {
-    left: -72px;
-  }
-  .carousel-control-next {
-    right: -72px;
-  }
-
   .carousel-control-prev:hover,
   .carousel-control-next:hover {
     transform: scale(1.05);
   }
 `
 
+/* imagem dentro de um “ratio 1:1” como nos cards da página Produtos */
 export const ImagensP = styled.img`
-  width: 250px;
-  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 `
 
 export const Produto = styled.div`
-  background-color: ${cores.branco};
+  /* “box” do card */
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 16px;
-  display: flex; /* garante layout consistente */
-  flex-direction: column; /* título/descrição/preço em coluna */
-  /* ...seus estilos... */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.25rem; /* o padding real vai vir do JSX p-5, mas deixo um mínimo */
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 
-  .product-title {
-    /* Fonte fluida e estável */
-    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-    line-height: 1.25;
+  /* igualamos alturas sem “brigar” com o Carousel */
+  min-height: 100%;
+
+  /* “efeito hover” como card */
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* wrapper para a imagem: simula a .ratio ratio-1x1 */
+  .img-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 1:1 */
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    overflow: hidden; /* protege o raio */
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    color: ${cores.cinzaMedio};
+    font-size: 0.9rem;
     margin-bottom: 0.5rem;
-
-    /* Truncar em 2 linhas com reticências */
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* número de linhas */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    /* Reserva altura fixa p/ evitar “pulo” entre slides */
-    min-height: calc(1.25em * 2); /* line-height * nº de linhas */
-
-    /* Para quebra inteligente em pt-BR (opcional) */
-    hyphens: auto;
-    word-break: normal;
-    overflow-wrap: anywhere;
   }
 
-  @media (min-width: 992px) {
-    .product-title {
-      /* No desktop, pode liberar 3 linhas se quiser */
-      -webkit-line-clamp: 2; /* troque para 3 se preferir */
-      min-height: calc(1.25em * 2);
-    }
-  }
-
+  /* preço */
   strong {
     color: ${cores.verdeEscuro};
+    font-size: 1.25rem;
   }
 
+  /* botões, iguais aos da página */
   .action-btn {
-    font-size: 0.8rem;
-    padding: 6px 12px;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
   }
 
-  /* Aumenta somente no desktop (≥992px) */
+  /* no desktop, um pouquinho maior */
   @media (min-width: 992px) {
     .action-btn {
-      font-size: 1rem; /* texto maior */
-      padding: 10px 20px; /* mais espaçamento interno */
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
     }
   }
 `
