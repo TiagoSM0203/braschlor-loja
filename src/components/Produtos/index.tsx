@@ -4,12 +4,7 @@ import { ImagensP, Products, Produto } from './styles'
 import { useCart } from '../../contexts/CardContext'
 import { useNavigate } from 'react-router-dom'
 
-import SabaoAzul5l from '../../assets/images/sabao-azul-5l.png'
-import SabaoAzul2l from '../../assets/images/sabao-azul-2l.png'
-import Amaciante5l from '../../assets/images/amaciante-5l.png'
-import AguaSanitaria5l from '../../assets/images/agua-sanitaria-5l.png'
-import Branquinho2l from '../../assets/images/branquinho-2l.png'
-import Pretinho4kg from '../../assets/images/pretinho-4kg.png'
+// imagens servidas de public/imgs
 
 type Product = {
   id: number
@@ -93,7 +88,7 @@ const Produtos = () => {
   const items: Product[] = [
     {
       id: 1,
-      img: SabaoAzul5l,
+      img: '/imgs/sabao-azul-5l.webp',
       title: 'Lava Roupas Líquido Azul 5L',
       desc: 'Limpeza eficiente e alto rendimento.',
       priceFrom: 29.9,
@@ -102,7 +97,7 @@ const Produtos = () => {
     },
     {
       id: 2,
-      img: SabaoAzul2l,
+      img: '/imgs/sabao-azul-2l.webp',
       title: 'Lava Roupas Líquido Azul 2L',
       desc: 'Espuma controlada e perfume agradável.',
       priceFrom: 14.9,
@@ -111,7 +106,7 @@ const Produtos = () => {
     },
     {
       id: 3,
-      img: Amaciante5l,
+      img: '/imgs/amaciante-5l.webp',
       title: 'Amaciante Azul 5L',
       desc: 'Maciez e fragrância prolongada.',
       priceFrom: 26.9,
@@ -120,7 +115,7 @@ const Produtos = () => {
     },
     {
       id: 4,
-      img: AguaSanitaria5l,
+      img: '/imgs/agua-sanitaria-5l.webp',
       title: 'Água Sanitária 5L',
       desc: 'Branqueia e desinfeta com segurança.',
       priceFrom: 26.9,
@@ -129,7 +124,7 @@ const Produtos = () => {
     },
     {
       id: 5,
-      img: Branquinho2l,
+      img: '/imgs/branquinho-2l.webp',
       title: 'Branquinho 2L',
       desc: 'Limpador multiuso de alto desempenho.',
       priceFrom: 10.9,
@@ -138,7 +133,7 @@ const Produtos = () => {
     },
     {
       id: 6,
-      img: Pretinho4kg,
+      img: '/imgs/pretinho-4kg.webp',
       title: 'Limpa Pneu Gel 4Kg',
       desc: 'Brilho intenso e proteção duradoura.',
       priceFrom: 39.9,
@@ -178,13 +173,28 @@ const Produtos = () => {
             <Row className="justify-content-center g-4 align-items-stretch">
               {group.map((prod, i) => (
                 <Col key={i} xs={12} md={6} xl={4} className="d-flex">
-                  <Produto className="w-100 d-flex flex-column text-center p-5 h-100">
-                    <div className="img-wrap">
-                      <ImagensP
-                        src={prod.img}
-                        alt={prod.alt ?? prod.title}
-                        className="img-fluid mx-auto"
-                      />
+                  <Produto className="w-100 d-flex flex-column text-center p-4 h-100">
+                    <div className="img-wrap" style={{ aspectRatio: '1 / 1' }}>
+                      {(() => {
+                        const base = prod.img.replace(
+                          /\.(png|jpe?g|webp|avif)$/i,
+                          ''
+                        )
+                        return (
+                          <picture>
+                            <source type="image/avif" srcSet={`${base}.avif`} />
+                            <source type="image/webp" srcSet={`${base}.webp`} />
+                            <ImagensP
+                              src={`${base}.webp`}
+                              alt={prod.alt ?? prod.title}
+                              className="img-fluid mx-auto"
+                              width={800}
+                              height={800}
+                              loading="lazy"
+                            />
+                          </picture>
+                        )
+                      })()}
                     </div>
 
                     <h3 className="mt-1 product-title">{prod.title}</h3>

@@ -23,7 +23,7 @@ const MOCK: Product[] = [
     id: 1,
     title: 'Lava Roupas Líquido Azul 5L',
     desc: 'Alto rendimento',
-    img: '/imgs/sabao-azul-5l.png',
+    img: '/imgs/sabao-azul-5l.webp',
     price: 24.9,
     category: 'Lava Roupas',
     brand: 'Lune Blanche',
@@ -33,7 +33,7 @@ const MOCK: Product[] = [
     id: 2,
     title: 'Lava Roupas Líquido Azul 2L',
     desc: 'Espuma controlada',
-    img: '/imgs/sabao-azul-2l.png',
+    img: '/imgs/sabao-azul-2l.webp',
     price: 12.5,
     category: 'Lava Roupas',
     brand: 'Lune Blanche',
@@ -43,7 +43,7 @@ const MOCK: Product[] = [
     id: 3,
     title: 'Amaciante Azul 5L',
     desc: 'Maciez prolongada',
-    img: '/imgs/amaciante-5l.png',
+    img: '/imgs/amaciante-5l.webp',
     price: 22.9,
     category: 'Amaciante',
     brand: 'Lune Blanche',
@@ -52,13 +52,13 @@ const MOCK: Product[] = [
     id: 4,
     title: 'Água Sanitária 5L',
     desc: 'Branqueia e desinfeta',
-    img: '/imgs/agua-sanitaria-5l.png',
+    img: '/imgs/agua-sanitaria-5l.webp',
     price: 9.99,
     category: 'Alvejante',
     brand: 'Lune Blanche',
   },
   {
-    id: 5,
+    id: 6,
     title: 'Limpa Pneu Gel 4Kg',
     desc: 'Brilho intenso',
     img: '/imgs/pretinho-4kg.webp',
@@ -68,10 +68,10 @@ const MOCK: Product[] = [
     inStock: true,
   },
   {
-    id: 6,
+    id: 5,
     title: 'Branquinho 2L',
     desc: 'Brilho intenso',
-    img: '/imgs/branquinho-2l.png',
+    img: '/imgs/branquinho-2l.webp',
     price: 34.9,
     category: 'Limpeza intensa',
     brand: 'Lune Blanche',
@@ -81,7 +81,7 @@ const MOCK: Product[] = [
     id: 7,
     title: 'Percarbonato de Sodio',
     desc: 'Brilho intenso',
-    img: '/imgs/percarbonato.png',
+    img: '/imgs/percarbonato.webp',
     price: 34.9,
     category: 'Alvejante',
     brand: 'Branquinho',
@@ -373,13 +373,37 @@ export default function ProdutosDetalhes() {
               <div className="row g-4">
                 {filtered.map((p) => (
                   <div key={p.id} className="col-12 col-sm-6 col-xl-4">
-                    <div className="card h-100 shadow-sm">
-                      <div className="ratio ratio-1x1 bg-light">
-                        <img
-                          src={p.img}
-                          alt={p.title}
-                          className="card-img-top object-fit-contain p-3"
-                        />
+                    <div className="card h-100 shadow-sm p-2">
+                      <div
+                        className="ratio ratio-1x1"
+                        style={{ aspectRatio: '1 / 1' }}
+                      >
+                        {(() => {
+                          const base = p.img.replace(
+                            /\.(png|jpe?g|webp|avif)$/i,
+                            ''
+                          )
+                          return (
+                            <picture>
+                              <source
+                                type="image/avif"
+                                srcSet={`${base}.avif`}
+                              />
+                              <source
+                                type="image/webp"
+                                srcSet={`${base}.webp`}
+                              />
+                              <img
+                                src={`${base}.webp`}
+                                alt={p.title}
+                                className="card-img-top object-fit-contain p-2"
+                                width={800}
+                                height={800}
+                                loading="lazy"
+                              />
+                            </picture>
+                          )
+                        })()}
                       </div>
                       <div className="card-body d-flex flex-column">
                         <h5 className="card-title mb-1">{p.title}</h5>

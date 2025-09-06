@@ -78,6 +78,21 @@ export const Produto = styled.div`
     justify-content: center;
     margin-bottom: 0.75rem;
     overflow: hidden; /* protege o raio */
+
+    /* Garanta que picture/IMG ocupem o container e não estourem */
+    > picture,
+    > img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 
   h3 {

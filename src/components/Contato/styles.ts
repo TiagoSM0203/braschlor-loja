@@ -86,4 +86,33 @@ export const Contatos = styled.div`
       font-size: 1.5em;
     }
   }
+
+  /* Modal styles */
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1050;
+  }
+
+  .modalContent {
+    background: ${cores.branco};
+    width: 100%;
+    max-width: 640px;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Prevent resizing the textarea */
+  textarea.form-control {
+    resize: none;
+  }
 `

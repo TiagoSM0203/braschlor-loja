@@ -1,5 +1,4 @@
 import { SobreNos } from './styles'
-import img from '../../assets/images/foto1.png'
 
 const Sobre = () => (
   <SobreNos className="container mt-5" id="sobre">
@@ -34,7 +33,16 @@ const Sobre = () => (
         </div>
       </div>
       <div className="col-12 col-md-6 order-1 order-md-2 text-center">
-        <img src={img} alt="fabrica" className="img-fluid rounded-3" />
+        <picture>
+          <source type="image/avif" srcSet="/imgs/foto1.avif" />
+          <source type="image/webp" srcSet="/imgs/foto1.webp" />
+          <img
+            src="/imgs/foto1.webp"
+            alt="fabrica"
+            className="img-fluid rounded-3"
+            loading="lazy"
+          />
+        </picture>
       </div>
     </div>
   </SobreNos>

@@ -1,5 +1,5 @@
+import { useMemo, useState, FormEvent } from 'react'
 import { Contatos } from './styles'
-import imgContato from '../../assets/images/contato.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faInstagram,
@@ -12,78 +12,237 @@ import {
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons'
 
-const Contato = () => (
-  <Contatos className="mt-5 pt-5 pb-5" id="contato">
-    <div className="container row align-items-center justify-content-center g-4">
-      <div className="w-lg-50 col-12 col-md-6 order-2 order-md-1 text-start text-md-start">
-        <h1>
-          <span>Dúvidas?</span> Estamos aqui para ajudar.
-        </h1>
-        <p>
-          Entre em contato com a nossa equipe para tirar suas dúvidas, resolver
-          problemas ou solicitar informações. Se você é revendedor, fale
-          diretamente com um de nossos vendedores para conhecer nossos produtos
-          e condições especiais. Caso tenha algum problema com uma compra, ou
-          precise de suporte em relação aos nossos produtos, estamos prontos
-          para ajudar. Escolha a forma de contato que preferir e teremos o
-          prazer em atendê-lo!
-        </p>
-        <div className="d-flex justify-content-between">
-          <div>
-            <h5>
-              <FontAwesomeIcon icon={faPhone} /> Telefone:
-            </h5>
-            <p>(11) 4442-2403</p>
-            <h5>
-              <FontAwesomeIcon icon={faEnvelope} /> Email:
-            </h5>
-            <p>vendas@braschlor.com.br</p>
-            <h5>
-              <FontAwesomeIcon icon={faLocationDot} /> Endereço:
-            </h5>
-            <p>Rua Canário, 143 Laranjeiras - Caieiras/SP 07745-015</p>
+const Contato = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [isSending, setIsSending] = useState(false)
+  const [sendError, setSendError] = useState('')
+  const [sendSuccess, setSendSuccess] = useState(false)
+
+  const isValidEmail = useMemo(
+    () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    [email]
+  )
+  const canSubmit = firstName && lastName && isValidEmail && message
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!canSubmit || isSending) return
+
+    setIsSending(true)
+    setSendError('')
+    setSendSuccess(false)
+    try {
+      const resp = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, email, message }),
+      })
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}))
+        throw new Error(data.error || 'Falha ao enviar. Tente novamente.')
+      }
+
+      setSendSuccess(true)
+      setFirstName('')
+      setLastName('')
+      setEmail('')
+      setMessage('')
+      setTimeout(() => setIsOpen(false), 1200)
+    } catch (err: any) {
+      setSendError(err.message || 'Erro inesperado ao enviar.')
+    } finally {
+      setIsSending(false)
+    }
+  }
+
+  return (
+    <Contatos className="mt-5 pt-5 pb-5" id="contato">
+      <div className="container row align-items-center justify-content-center g-4">
+        <div className="w-lg-50 col-12 col-md-6 order-2 order-md-1 text-start text-md-start">
+          <h1>
+            <span>Dúvidas?</span> Estamos aqui para ajudar.
+          </h1>
+          <p>
+            Entre em contato com a nossa equipe para tirar suas dúvidas,
+            resolver problemas ou solicitar informações. Se você é revendedor,
+            fale diretamente com um de nossos vendedores para conhecer nossos
+            produtos e condições especiais. Caso tenha algum problema com uma
+            compra, ou precise de suporte em relação aos nossos produtos,
+            estamos prontos para ajudar. Escolha a forma de contato que preferir
+            e teremos o prazer em atendê-lo!
+          </p>
+          <div className="d-flex justify-content-between">
+            <div>
+              <h5>
+                <FontAwesomeIcon icon={faPhone} /> Telefone:
+              </h5>
+              <p>(11) 4442-2403</p>
+              <h5>
+                <FontAwesomeIcon icon={faEnvelope} /> Email:
+              </h5>
+              <p>vendas@braschlor.com.br</p>
+              <h5>
+                <FontAwesomeIcon icon={faLocationDot} /> Endereço:
+              </h5>
+              <p>Rua Canário, 143 Laranjeiras - Caieiras/SP 07745-015</p>
+            </div>
+            <div>
+              <p>
+                <a
+                  href="https://www.instagram.com/luneblanchepro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FontAwesomeIcon icon={faInstagram} />
+                </a>
+              </p>
+              <p>
+                <a
+                  href="https://wa.me/5511993521508"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} />
+                </a>
+              </p>
+              <p>
+                <a
+                  href="https://www.facebook.com/Braschlor.Aromaty"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FontAwesomeIcon icon={faFacebook} />
+                </a>
+              </p>
+            </div>
           </div>
-          <div>
-            <p>
-              <a
-                href="https://www.instagram.com/luneblanchepro"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-            </p>
-            <p>
-              <a
-                href="https://wa.me/5511993521508"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faWhatsapp} />
-              </a>
-            </p>
-            <p>
-              <a
-                href="https://www.facebook.com/Braschlor.Aromaty"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FontAwesomeIcon icon={faFacebook} />
-              </a>
-            </p>
+          <div className="text-center text-md-start">
+            <button
+              type="button"
+              className="btn btn-outline-success p-3"
+              onClick={() => setIsOpen(true)}
+            >
+              Entre em contato
+            </button>
           </div>
         </div>
-        <div className="text-center text-md-start">
-          <button type="button" className="btn btn-outline-success p-3">
-            Entre em contato
-          </button>
+        <div className="col-12 col-md-6 order-1 order-md-2 text-center">
+          <picture>
+            <source type="image/avif" srcSet="/imgs/contato.avif" />
+            <source type="image/webp" srcSet="/imgs/contato.webp" />
+            <img
+              src="/imgs/contato.webp"
+              alt="Contato"
+              className="img-fluid rounded-3"
+              loading="lazy"
+            />
+          </picture>
         </div>
       </div>
-      <div className="col-12 col-md-6 order-1 order-md-2 text-center">
-        <img src={imgContato} alt="Contato" className="img-fluid rounded-3" />
-      </div>
-    </div>
-  </Contatos>
-)
+
+      {isOpen && (
+        <div className="modalOverlay" role="dialog" aria-modal="true">
+          <div className="modalContent">
+            <div className="modalHeader d-flex justify-content-between align-items-center mb-3">
+              <h5 className="m-0">Fale com a gente</h5>
+              <button
+                aria-label="Fechar"
+                className="btn btn-sm btn-outline-success"
+                onClick={() => setIsOpen(false)}
+              >
+                Fechar
+              </button>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="row g-3 modalBody">
+                <div className="col-12 col-md-6">
+                  <label className="form-label">Nome</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="col-12 col-md-6">
+                  <label className="form-label">Sobrenome</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="col-12">
+                  <label className="form-label">Email</label>
+                  <input
+                    className={`form-control ${
+                      email && !isValidEmail ? 'is-invalid' : ''
+                    }`}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  {email && !isValidEmail && (
+                    <div className="invalid-feedback">
+                      Informe um email válido.
+                    </div>
+                  )}
+                </div>
+                <div className="col-12">
+                  <label className="form-label">Mensagem</label>
+                  <textarea
+                    className="form-control"
+                    rows={5}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                </div>
+                {sendError && (
+                  <div className="col-12">
+                    <div className="alert alert-danger py-2" role="alert">
+                      {sendError}
+                    </div>
+                  </div>
+                )}
+                {sendSuccess && (
+                  <div className="col-12">
+                    <div className="alert alert-success py-2" role="alert">
+                      Mensagem enviada com sucesso!
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="modalFooter mt-4 d-flex justify-content-end gap-2">
+                <button
+                  type="button"
+                  className="btn btn-outline-success"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={!canSubmit || isSending}
+                >
+                  {isSending ? 'Enviando...' : 'Enviar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </Contatos>
+  )
+}
 
 export default Contato

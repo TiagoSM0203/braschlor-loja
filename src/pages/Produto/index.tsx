@@ -41,12 +41,30 @@ export default function ProdutoPage() {
         </nav>
         <div className="row g-4">
           <div className="col-12 col-lg-5">
-            <div className="ratio ratio-1x1 bg-light rounded shadow-sm">
-              <img
-                src={product.img}
-                alt={product.alt ?? product.title}
-                className="object-fit-contain p-3"
-              />
+            <div
+              className="ratio ratio-1x1 bg-light rounded shadow-sm"
+              style={{ aspectRatio: '1 / 1' }}
+            >
+              {(() => {
+                const base = product.img.replace(
+                  /\.(png|jpe?g|webp|avif)$/i,
+                  ''
+                )
+                return (
+                  <picture>
+                    <source type="image/avif" srcSet={`${base}.avif`} />
+                    <source type="image/webp" srcSet={`${base}.webp`} />
+                    <img
+                      src={`${base}.webp`}
+                      alt={product.alt ?? product.title}
+                      className="object-fit-contain p-4"
+                      width={800}
+                      height={800}
+                      loading="lazy"
+                    />
+                  </picture>
+                )
+              })()}
             </div>
           </div>
           <div className="col-12 col-lg-7">

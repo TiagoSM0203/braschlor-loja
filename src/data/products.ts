@@ -16,7 +16,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 1,
     title: 'Lava Roupas Líquido Azul 5L',
-    img: '/imgs/sabao-azul-5l.png',
+    img: '/imgs/sabao-azul-5l.webp',
     priceFrom: 29.9,
     price: 24.9,
     shortDesc: 'Limpeza eficiente e alto rendimento.',
@@ -30,7 +30,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 2,
     title: 'Lava Roupas Líquido Azul 2L',
-    img: '/imgs/sabao-azul-2l.png',
+    img: '/imgs/sabao-azul-2l.webp',
     priceFrom: 14.9,
     price: 12.5,
     shortDesc: 'Espuma controlada e perfume agradável.',
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 3,
     title: 'Amaciante Azul 5L',
-    img: '/imgs/amaciante-5l.png',
+    img: '/imgs/amaciante-5l.webp',
     priceFrom: 26.9,
     price: 22.9,
     shortDesc: 'Maciez e fragrância prolongada.',
@@ -58,7 +58,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 4,
     title: 'Água Sanitária 5L',
-    img: '/imgs/agua-sanitaria-5l.png',
+    img: '/imgs/agua-sanitaria-5l.webp',
     priceFrom: 26.9,
     price: 9.99,
     shortDesc: 'Branqueia e desinfeta com segurança.',
@@ -72,7 +72,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 5,
     title: 'Branquinho 2L',
-    img: '/imgs/branquinho-2l.png',
+    img: '/imgs/branquinho-2l.webp',
     priceFrom: 10.9,
     price: 8.9,
     shortDesc: 'Limpador multiuso de alto desempenho.',
@@ -86,7 +86,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 6,
     title: 'Limpa Pneu Gel 4Kg',
-    img: '/imgs/pretinho-4kg.png',
+    img: '/imgs/pretinho-4kg.webp',
     priceFrom: 39.9,
     price: 34.9,
     shortDesc: 'Brilho intenso e proteção duradoura.',
@@ -100,7 +100,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 7,
     title: 'Percarbonato de sodio',
-    img: '/imgs/percarbonato.png',
+    img: '/imgs/percarbonato.webp',
     priceFrom: 39.9,
     price: 34.9,
     shortDesc: 'Brilho intenso e proteção duradoura.',

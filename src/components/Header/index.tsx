@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { HeaderBar } from './styles'
-import logo from '../../assets/images/novo_logo_braschlor.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { useCart } from '../../contexts/CardContext'
@@ -49,7 +48,15 @@ const Header = () => {
     >
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
-          <img src={logo} alt="Braschlor" />
+          <picture>
+            <source type="image/avif" srcSet="/imgs/novo_logo_braschlor.avif" />
+            <source type="image/webp" srcSet="/imgs/novo_logo_braschlor.webp" />
+            <img
+              src="/imgs/novo_logo_braschlor.webp"
+              alt="Braschlor"
+              loading="lazy"
+            />
+          </picture>
         </Link>
 
         <button

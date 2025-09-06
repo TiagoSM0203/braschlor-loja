@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useCart } from '../../contexts/CardContext'
 import { Link } from 'react-router-dom'
+import { CarrinhoP } from './styles'
 
 const formatBRL = (v: number) =>
   v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -14,18 +15,18 @@ export default function Carrinho() {
 
   if (items.length === 0) {
     return (
-      <div className="container mt-5">
+      <CarrinhoP className="container">
         <h1 className="mb-4">Seu carrinho</h1>
         <div className="alert alert-info">Seu carrinho está vazio.</div>
         <Link className="btn btn-success" to="/produtos">
           Voltar aos produtos
         </Link>
-      </div>
+      </CarrinhoP>
     )
   }
 
   return (
-    <div className="container py-4">
+    <CarrinhoP className="container py-4">
       <h1 className="mb-4">Seu carrinho</h1>
 
       <div className="row g-4">
@@ -132,6 +133,6 @@ export default function Carrinho() {
           </div>
         </div>
       </div>
-    </div>
+    </CarrinhoP>
   )
 }

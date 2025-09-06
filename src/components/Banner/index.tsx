@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom'
 import { Fundo, Imagem, Titulo, Marquee, MarqueeTrack } from './styles'
 
-import bannerImg from '../../assets/images/hero.png'
+// Use optimized background via public/imgs with image-set for avif/webp/png
 
 const Banner = () => (
-  <Imagem id="inicio" style={{ backgroundImage: `url(${bannerImg})` }}>
+  <Imagem
+    id="inicio"
+    style={{
+      backgroundImage:
+        "image-set(url('/imgs/hero.avif') type('image/avif'), url('/imgs/hero.webp') type('image/webp'))",
+    }}
+  >
     <Fundo className="container">
       <Marquee>
         <MarqueeTrack>
