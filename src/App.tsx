@@ -12,6 +12,7 @@ const ProdutosDetalhes = lazy(() => import('./pages/ProdutosDetalhes'))
 const Carrinho = lazy(() => import('./pages/Carrinho'))
 const ProdutoPage = lazy(() => import('./pages/Produto'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+const ContatoPage = lazy(() => import('./pages/Contato'))
 
 export default function App() {
   return (
@@ -29,10 +30,10 @@ export default function App() {
             <Route path="/produtos" element={<ProdutosDetalhes />} />
             <Route path="/produto/:id" element={<ProdutoPage />} />
             <Route path="/carrinho" element={<Carrinho />} />
+            <Route path="/contato" element={<ContatoPage />} />
           </Routes>
+          <Footer />
         </Suspense>
-
-        <Footer />
       </CartProvider>
     </BrowserRouter>
   )
