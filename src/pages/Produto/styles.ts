@@ -36,6 +36,8 @@ export const ProdutoWrapper = styled.div`
     max-height: 100%;
     width: 100%;
     height: 100%;
+    object-fit: contain; /* mantém proporção correta em caixas 1x1 */
+    object-position: center;
     border-radius: 16px;
   }
 

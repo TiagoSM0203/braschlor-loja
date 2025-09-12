@@ -46,6 +46,8 @@ export const ProdutosD = styled.div`
     max-height: 100%;
     width: 100%;
     height: 100%;
+    object-fit: contain; /* evita esticar a imagem em iOS/Safari */
+    object-position: center;
     border-radius: 16px;
   }
 `
