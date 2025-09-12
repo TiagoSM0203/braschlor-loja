@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { cores } from '../../styles'
 
 export const LoginWrapper = styled.div`
-  min-height: 140vh;
+  /* Ocupa a viewport útil e compensa o header fixo */
+  min-height: calc(100svh - var(--header-h, 80px) - var(--header-gap, 20px));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,6 +15,8 @@ export const LoginWrapper = styled.div`
     ${cores.cinzaClaro} 100%
   );
   padding: 20px;
+  /* Evita que o conteúdo fique sob o header fixo */
+  padding-top: calc(var(--header-h, 80px) + var(--header-gap, 20px) + 16px);
 `
 
 export const LoginCard = styled.div`
