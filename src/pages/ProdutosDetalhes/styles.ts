@@ -2,22 +2,33 @@ import styled from 'styled-components'
 import { cores } from '../../styles'
 
 export const ProdutosD = styled.div`
-  margin-top: 17vh;
+  margin-top: 13vh;
   .container {
     max-width: 1400px;
   }
 
-  h1 {
-    font-family: 'Anton', sans-serif;
-    color: ${cores.verdeClaro};
-    font-size: clamp(60px, 6vw, 56px);
-    text-transform: uppercase;
+  /* Campo de busca com ícone embutido */
+  .search-input {
+    position: relative;
+  }
+  .search-input .form-control {
+    padding-left: 2.25rem; /* espaço para a lupa */
+  }
+  .search-input .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: ${cores.cinzaMedio};
+    pointer-events: none; /* evita capturar cliques, focando o input */
+  }
 
-    span {
-      text-decoration: underline;
-      font-family: 'Anton', sans-serif;
-      color: ${cores.verde};
-    }
+  /* Quando há texto, esconda o ícone e recupere o padding */
+  .search-input.has-value .search-icon {
+    display: none;
+  }
+  .search-input.has-value .form-control {
+    padding-left: 0.75rem;
   }
 
   /* Evita que imagens estourem dos cards (ratio 1x1) */
@@ -35,6 +46,6 @@ export const ProdutosD = styled.div`
     max-height: 100%;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    border-radius: 16px;
   }
 `

@@ -2,6 +2,10 @@ import styled from 'styled-components'
 import { cores } from '../../styles'
 
 export const Contatos = styled.div`
+  /* Faz o alvo "#contato" encaixar abaixo do header fixo ao navegar por âncora */
+  scroll-margin-top: calc(var(--header-h) + var(--header-gap));
+  /* Garante que a seção ocupe ao menos a altura visível menos o header */
+  min-height: calc(100vh - var(--header-h) - var(--header-gap));
   background: linear-gradient(to right, ${cores.verde}, ${cores.verdeEscuro});
 
   .container {
@@ -43,6 +47,16 @@ export const Contatos = styled.div`
     color: ${cores.branco};
     border-color: ${cores.verdeEscuro};
     background-color: ${cores.verdeEscuro};
+  }
+
+  .botao-close {
+    border: none;
+  }
+
+  .botao-close:hover {
+    text-decoration: 2px underline;
+    background-color: transparent;
+    color: ${cores.verdeEscuro};
   }
 
   a {

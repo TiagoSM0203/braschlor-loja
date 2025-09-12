@@ -91,8 +91,8 @@ const Produtos = () => {
       img: '/imgs/sabao-azul-5l.webp',
       title: 'Lava Roupas Líquido Azul 5L',
       desc: 'Limpeza eficiente e alto rendimento.',
-      priceFrom: 29.9,
-      price: 24.9,
+      priceFrom: 22.9,
+      price: 16.6,
       alt: 'Lava Roupas Azul 5L',
     },
     {
@@ -100,8 +100,8 @@ const Produtos = () => {
       img: '/imgs/sabao-azul-2l.webp',
       title: 'Lava Roupas Líquido Azul 2L',
       desc: 'Espuma controlada e perfume agradável.',
-      priceFrom: 14.9,
-      price: 12.5,
+      priceFrom: 12.9,
+      price: 7.8,
       alt: 'Lava Roupas Azul 2L',
     },
     {
@@ -109,8 +109,8 @@ const Produtos = () => {
       img: '/imgs/amaciante-5l.webp',
       title: 'Amaciante Azul 5L',
       desc: 'Maciez e fragrância prolongada.',
-      priceFrom: 26.9,
-      price: 22.9,
+      priceFrom: 18.9,
+      price: 12.15,
       alt: 'Amaciante 5L',
     },
     {
@@ -118,8 +118,8 @@ const Produtos = () => {
       img: '/imgs/agua-sanitaria-5l.webp',
       title: 'Água Sanitária 5L',
       desc: 'Branqueia e desinfeta com segurança.',
-      priceFrom: 26.9,
-      price: 9.99,
+      priceFrom: 12.9,
+      price: 9.2,
       alt: 'Água Sanitária 5L',
     },
     {
@@ -128,7 +128,7 @@ const Produtos = () => {
       title: 'Branquinho 2L',
       desc: 'Limpador multiuso de alto desempenho.',
       priceFrom: 10.9,
-      price: 8.9,
+      price: 8.5,
       alt: 'Branquinho 2L',
     },
     {
@@ -136,8 +136,8 @@ const Produtos = () => {
       img: '/imgs/pretinho-4kg.webp',
       title: 'Limpa Pneu Gel 4Kg',
       desc: 'Brilho intenso e proteção duradoura.',
-      priceFrom: 39.9,
-      price: 34.9,
+      priceFrom: 45,
+      price: 40,
       alt: 'Limpa Pneu 4Kg',
     },
   ]

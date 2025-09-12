@@ -36,15 +36,21 @@ const Contato = () => {
     setSendError('')
     setSendSuccess(false)
     try {
-      const resp = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName, email, message }),
-      })
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}))
-        throw new Error(data.error || 'Falha ao enviar. Tente novamente.')
-      }
+      const subject = `Contato do site - ${firstName} ${lastName}`
+      const bodyLines = [
+        `Nome: ${firstName} ${lastName}`,
+        `Email: ${email}`,
+        '',
+        'Mensagem:',
+        message,
+      ]
+      const body = encodeURIComponent(bodyLines.join('\n'))
+      const to = 'vendas@braschlor.com.br'
+      const mailto = `mailto:${to}?subject=${encodeURIComponent(
+        subject
+      )}&body=${body}`
+
+      window.location.href = mailto
 
       setSendSuccess(true)
       setFirstName('')
@@ -52,8 +58,8 @@ const Contato = () => {
       setEmail('')
       setMessage('')
       setTimeout(() => setIsOpen(false), 1200)
-    } catch (err: any) {
-      setSendError(err.message || 'Erro inesperado ao enviar.')
+    } catch (err: unknown) {
+      setSendError('Nao foi possivel abrir o cliente de email.')
     } finally {
       setIsSending(false)
     }
@@ -151,7 +157,7 @@ const Contato = () => {
               <h5 className="m-0">Fale com a gente</h5>
               <button
                 aria-label="Fechar"
-                className="btn btn-sm btn-outline-success"
+                className="btn btn-sm btn-outline-success botao-close p-2"
                 onClick={() => setIsOpen(false)}
               >
                 Fechar
@@ -224,7 +230,7 @@ const Contato = () => {
               <div className="modalFooter mt-4 d-flex justify-content-end gap-2">
                 <button
                   type="button"
-                  className="btn btn-outline-success"
+                  className="btn btn-outline-success botao-close p-2"
                   onClick={() => setIsOpen(false)}
                 >
                   Cancelar

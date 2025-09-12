@@ -10,9 +10,9 @@ import { GlobalCss } from './styles'
 const Home = lazy(() => import('./pages/Home'))
 const ProdutosDetalhes = lazy(() => import('./pages/ProdutosDetalhes'))
 const Carrinho = lazy(() => import('./pages/Carrinho'))
+const SejaParceiro = lazy(() => import('./pages/SejaParceiro'))
 const ProdutoPage = lazy(() => import('./pages/Produto'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
-const ContatoPage = lazy(() => import('./pages/Contato'))
 
 export default function App() {
   return (
@@ -30,7 +30,7 @@ export default function App() {
             <Route path="/produtos" element={<ProdutosDetalhes />} />
             <Route path="/produto/:id" element={<ProdutoPage />} />
             <Route path="/carrinho" element={<Carrinho />} />
-            <Route path="/contato" element={<ContatoPage />} />
+            <Route path="/seja-parceiro" element={<SejaParceiro />} />
           </Routes>
           <Footer />
         </Suspense>

@@ -18,6 +18,24 @@ export default function ProdutoPage() {
   const { addItem } = useCart()
   const [qty, setQty] = useState(1)
 
+  const renderText = (text: string) => {
+    const paragraphs = text.split(/\n\s*\n/)
+    return (
+      <>
+        {paragraphs.map((p, i) => (
+          <p key={i} style={{ marginBottom: '0.75rem' }}>
+            {p.split(/\n+/).map((line, j, arr) => (
+              <span key={j}>
+                {line.trim()}
+                {j < arr.length - 1 && <br />}
+              </span>
+            ))}
+          </p>
+        ))}
+      </>
+    )
+  }
+
   if (!product) {
     return (
       <ProdutoWrapper>
@@ -42,7 +60,7 @@ export default function ProdutoPage() {
         <div className="row g-4">
           <div className="col-12 col-lg-5">
             <div
-              className="ratio ratio-1x1 bg-light rounded shadow-sm"
+              className="ratio ratio-1x1 shadow-sm"
               style={{ aspectRatio: '1 / 1' }}
             >
               {(() => {
@@ -51,18 +69,20 @@ export default function ProdutoPage() {
                   ''
                 )
                 return (
-                  <picture>
-                    <source type="image/avif" srcSet={`${base}.avif`} />
-                    <source type="image/webp" srcSet={`${base}.webp`} />
-                    <img
-                      src={`${base}.webp`}
-                      alt={product.alt ?? product.title}
-                      className="object-fit-contain p-4"
-                      width={800}
-                      height={800}
-                      loading="lazy"
-                    />
-                  </picture>
+                  <div className="d-flex justify-content-center">
+                    <picture>
+                      <source type="image/avif" srcSet={`${base}.avif`} />
+                      <source type="image/webp" srcSet={`${base}.webp`} />
+                      <img
+                        src={`${base}.webp`}
+                        alt={product.alt ?? product.title}
+                        className="p-2"
+                        width={800}
+                        height={800}
+                        loading="lazy"
+                      />
+                    </picture>
+                  </div>
                 )
               })()}
             </div>
@@ -116,15 +136,15 @@ export default function ProdutoPage() {
             <Accordion defaultActiveKey="0" alwaysOpen>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Descrição</Accordion.Header>
-                <Accordion.Body>{product.longDesc}</Accordion.Body>
+                <Accordion.Body>{renderText(product.longDesc)}</Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="1">
                 <Accordion.Header>Modo de uso</Accordion.Header>
-                <Accordion.Body>{product.usage}</Accordion.Body>
+                <Accordion.Body>{renderText(product.usage)}</Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="2">
                 <Accordion.Header>Cuidados</Accordion.Header>
-                <Accordion.Body>{product.care}</Accordion.Body>
+                <Accordion.Body>{renderText(product.care)}</Accordion.Body>
               </Accordion.Item>
             </Accordion>
           </div>

@@ -7,23 +7,25 @@ import Produtos from '../../components/Produtos'
 import Contato from '../../components/Contato'
 
 const Home = () => {
-  const { hash } = useLocation()
+  const location = useLocation()
 
   useEffect(() => {
-    if (hash) {
-      const id = hash.replace('#', '')
+    if (location.hash) {
+      const id = location.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Usa scroll-margin-top do alvo para compensar o header
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     }
-  }, [hash])
+  }, [location])
+
   return (
     <>
       <Banner />
-      <Sobre />
-      <Marcas />
       <Produtos />
+      <Marcas />
+      <Sobre />
       <Contato />
     </>
   )

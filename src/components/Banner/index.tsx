@@ -38,9 +38,11 @@ const Banner = () => (
         </MarqueeTrack>
       </Marquee>
       <Titulo>Produtos de Limpeza com Qualidade e Preço de Fábrica.</Titulo>
-      <Link to="/produtos" className="btn btn-success btn-lg">
-        Comprar agora
-      </Link>
+      <div className="d-flex justify-content-between">
+        <Link to="/produtos" className="btn btn-success btn-lg">
+          Comprar agora
+        </Link>
+      </div>
     </Fundo>
   </Imagem>
 )

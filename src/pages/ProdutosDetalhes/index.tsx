@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { ProdutosD } from './styles'
 import { useCart } from '../../contexts/CardContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 type Product = {
   id: number
@@ -13,6 +15,10 @@ type Product = {
     | 'Amaciante'
     | 'Alvejante'
     | 'Automotivo'
+    | 'Desinfetante'
+    | 'Limpador Perfumado'
+    | 'Multiuso'
+    | 'Lustra Móveis'
     | 'Limpeza intensa'
   brand?: 'Lune Blanche' | 'Branquinho'
   inStock?: boolean
@@ -24,8 +30,38 @@ const MOCK: Product[] = [
     title: 'Lava Roupas Líquido Azul 5L',
     desc: 'Alto rendimento',
     img: '/imgs/sabao-azul-5l.webp',
-    price: 24.9,
+    price: 16.6,
     category: 'Lava Roupas',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 35,
+    title: 'Cloro Gel 2L',
+    desc: 'Aderência e ação eficaz',
+    img: '/imgs/cloro-gel-2l.webp',
+    price: 9.9,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 36,
+    title: 'Cloro Gel 5L',
+    desc: 'Ideal para grandes áreas',
+    img: '/imgs/cloro-gel-5l.webp',
+    price: 16.9,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 37,
+    title: 'Limpador Perfumado Base de Álcool 5L',
+    desc: 'Limpeza com fragrância suave',
+    img: '/imgs/alcool-perfumado.webp',
+    price: 14.9,
+    category: 'Limpeza intensa',
     brand: 'Lune Blanche',
     inStock: true,
   },
@@ -34,7 +70,7 @@ const MOCK: Product[] = [
     title: 'Lava Roupas Líquido Azul 2L',
     desc: 'Espuma controlada',
     img: '/imgs/sabao-azul-2l.webp',
-    price: 12.5,
+    price: 7.8,
     category: 'Lava Roupas',
     brand: 'Lune Blanche',
     inStock: true,
@@ -44,7 +80,7 @@ const MOCK: Product[] = [
     title: 'Amaciante Azul 5L',
     desc: 'Maciez prolongada',
     img: '/imgs/amaciante-5l.webp',
-    price: 22.9,
+    price: 12.15,
     category: 'Amaciante',
     brand: 'Lune Blanche',
   },
@@ -53,7 +89,7 @@ const MOCK: Product[] = [
     title: 'Água Sanitária 5L',
     desc: 'Branqueia e desinfeta',
     img: '/imgs/agua-sanitaria-5l.webp',
-    price: 9.99,
+    price: 9.2,
     category: 'Alvejante',
     brand: 'Lune Blanche',
   },
@@ -62,7 +98,7 @@ const MOCK: Product[] = [
     title: 'Limpa Pneu Gel 4Kg',
     desc: 'Brilho intenso',
     img: '/imgs/pretinho-4kg.webp',
-    price: 34.9,
+    price: 40,
     category: 'Automotivo',
     brand: 'Lune Blanche',
     inStock: true,
@@ -72,22 +108,334 @@ const MOCK: Product[] = [
     title: 'Branquinho 2L',
     desc: 'Brilho intenso',
     img: '/imgs/branquinho-2l.webp',
-    price: 34.9,
-    category: 'Limpeza intensa',
+    price: 8.5,
+    category: 'Multiuso',
     brand: 'Lune Blanche',
     inStock: true,
   },
   {
     id: 7,
-    title: 'Percarbonato de Sodio',
+    title: 'Percarbonato de Sódio 1Kg',
     desc: 'Brilho intenso',
     img: '/imgs/percarbonato.webp',
-    price: 34.9,
-    category: 'Alvejante',
+    price: 25,
+    category: 'Lava Roupas',
     brand: 'Branquinho',
     inStock: true,
   },
+  {
+    id: 8,
+    title: 'Água Sanitária 2L',
+    desc: 'Brilho intenso',
+    img: '/imgs/agua-sanitaria-2l.webp',
+    price: 5.1,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 9,
+    title: 'Alvejante Azul 2L',
+    desc: 'Remove manchas com eficiência',
+    img: '/imgs/alvejante-2l.webp',
+    price: 7.4,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 10,
+    title: 'Alvejante Azul 5L',
+    desc: 'Ideal para grandes limpezas',
+    img: '/imgs/alvejante-5l.webp',
+    price: 12,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 11,
+    title: 'Amaciante Azul 2L',
+    desc: 'Maciez e perfume agradável',
+    img: '/imgs/amaciante-2l.webp',
+    price: 7.15,
+    category: 'Amaciante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 12,
+    title: 'Branquinho 5L',
+    desc: 'Limpador multiuso',
+    img: '/imgs/branquinho-5l.webp',
+    price: 16.8,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 13,
+    title: 'Desinfetante Casa Limpa 5L',
+    desc: 'Limpeza prática do dia a dia',
+    img: '/imgs/casa-limpa.webp',
+    price: 9.1,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 14,
+    title: 'Cloro Líquido 6% 5L',
+    desc: 'Desinfecção e alvejamento',
+    img: '/imgs/cloro-liquido.webp',
+    price: 18,
+    category: 'Alvejante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 15,
+    title: 'Detergente Neutro 2L',
+    desc: 'Remove gorduras e sujeiras',
+    img: '/imgs/detergente-2l.webp',
+    price: 8,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 16,
+    title: 'Detergente Neutro 5L',
+    desc: 'Rendimento superior',
+    img: '/imgs/detergente-5l.webp',
+    price: 15,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 17,
+    title: 'Lava Autos 5L',
+    desc: 'Limpeza automotiva com brilho',
+    img: '/imgs/lava-autos.webp',
+    price: 19.1,
+    category: 'Automotivo',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 18,
+    title: 'Desinfetante Lavanda 5L',
+    desc: 'Aroma agradável',
+    img: '/imgs/lavanda.webp',
+    price: 9.1,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 19,
+    title: 'Limpador Perfumado Concentrado Campos Verde 1L',
+    desc: 'Perfuma e ajuda a limpar',
+    img: '/imgs/lp-campos-verde.webp',
+    price: 25,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 20,
+    title: 'Limpador Perfumado Concentrado Casa Perfumada 1L',
+    desc: 'Ambiente sempre cheiroso',
+    img: '/imgs/lp-casa-perfumada.webp',
+    price: 14,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 21,
+    title: 'Limpador Perfumado Concentrado Dama da Noite 1L',
+    desc: 'Fragrância marcante',
+    img: '/imgs/lp-dama-da-noite.webp',
+    price: 14,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 22,
+    title: 'Limpador Perfumado Concentrado Eucalipto 1L',
+    desc: 'Toque refrescante',
+    img: '/imgs/lp-eucalipto.webp',
+    price: 25,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 23,
+    title: 'Limpador Perfumado Concentrado Lavanda 1L',
+    desc: 'Perfume suave',
+    img: '/imgs/lp-lavanda.webp',
+    price: 25,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 24,
+    title: 'Desinfetante Marine 5L',
+    desc: 'Frescor do mar',
+    img: '/imgs/marine.webp',
+    price: 9.1,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 25,
+    title: 'Limpa Pneu Gel 500g',
+    desc: 'Brilho para pneus',
+    img: '/imgs/pretinho-p.webp',
+    price: 9.8,
+    category: 'Automotivo',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 26,
+    title: 'Silicone Gel 3,6Kg',
+    desc: 'Proteção e brilho',
+    img: '/imgs/silicone-grande.webp',
+    price: 40,
+    category: 'Automotivo',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 27,
+    title: 'Silicone Gel 500ml',
+    desc: 'Cuidado compacto',
+    img: '/imgs/silicone-pequeno.webp',
+    price: 9.8,
+    category: 'Automotivo',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 28,
+    title: 'Desinfetante Talco 5L',
+    desc: 'Perfuma suavemente',
+    img: '/imgs/talco.webp',
+    price: 9.1,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 29,
+    title: 'Lustra Móveis 500ml',
+    desc: 'Realca o brilho e protege',
+    img: '/imgs/lustra-moveis.webp',
+    price: 6.05,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 30,
+    title: 'Multi-uso Incolor 5L',
+    desc: 'Limpa diversas superficies',
+    img: '/imgs/multi-uso.webp',
+    price: 15.2,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 31,
+    title: 'Lava Roupas Líquido Coco 5L',
+    desc: 'Delicado e eficiente',
+    img: '/imgs/sabao-coco-5l.webp',
+    price: 16.6,
+    category: 'Lava Roupas',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 32,
+    title: 'Lava Roupas Líquido Coco 2L',
+    desc: 'Ideal para roupas delicadas',
+    img: '/imgs/sabao-coco-2l.webp',
+    price: 7.8,
+    category: 'Lava Roupas',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 33,
+    title: 'Limpador Perfumado Concentrado Talco 1L',
+    desc: 'Fragrancia de talco',
+    img: '/imgs/lp-talco.webp',
+    price: 25,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 34,
+    title: 'Limpador Perfumado Concentrado Violeta 1L',
+    desc: 'Aroma de violeta',
+    img: '/imgs/lp-violeta.webp',
+    price: 25,
+    category: 'Limpeza intensa',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
+  {
+    id: 38,
+    title: 'Desinfetante Flores do Campo 5L',
+    desc: 'Perfuma com notas florais',
+    img: '/imgs/flores-do-campo.webp',
+    price: 9.1,
+    category: 'Desinfetante',
+    brand: 'Lune Blanche',
+    inStock: true,
+  },
 ]
+
+// Normaliza as categorias com base no título para agrupar corretamente
+const categorize = (p: Product): Product['category'] => {
+  const t = p.title.toLowerCase()
+  if (t.includes('lava roupas')) return 'Lava Roupas'
+  if (t.includes('amaciante')) return 'Amaciante'
+  if (
+    t.includes('água sanit') ||
+    t.includes('agua sanit') ||
+    t.includes('alvejante')
+  )
+    return 'Alvejante'
+  if (t.includes('desinfetante')) return 'Desinfetante'
+  if (t.includes('limpador perfumado')) return 'Limpador Perfumado'
+  if (t.includes('lustra')) return 'Lustra Móveis'
+  if (
+    t.includes('multi-uso') ||
+    t.includes('multiuso') ||
+    t.includes('branquinho')
+  )
+    return 'Multiuso'
+  if (t.includes('detergente')) return 'Multiuso'
+  if (
+    t.includes('lava autos') ||
+    t.includes('limpa pneu') ||
+    t.includes('silicone')
+  )
+    return 'Automotivo'
+  return p.category
+}
+
+const PRODUCTS: Product[] = MOCK.map((p) => ({ ...p, category: categorize(p) }))
 
 const formatBRL = (v: number) =>
   v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -103,15 +451,15 @@ export default function ProdutosDetalhes() {
     'relevance'
   )
 
-  const categories = Array.from(new Set(MOCK.map((p) => p.category)))
+  const categories = Array.from(new Set(PRODUCTS.map((p) => p.category)))
   const brands = Array.from(
-    new Set(MOCK.map((p) => p.brand).filter(Boolean))
+    new Set(PRODUCTS.map((p) => p.brand).filter(Boolean))
   ) as string[]
 
   const { addItem } = useCart()
 
   const filtered = useMemo(() => {
-    let list = [...MOCK]
+    let list = [...PRODUCTS]
 
     const term = q.trim().toLowerCase()
     if (term) {
@@ -129,6 +477,10 @@ export default function ProdutosDetalhes() {
 
     if (sort === 'priceAsc') list.sort((a, b) => a.price - b.price)
     if (sort === 'priceDesc') list.sort((a, b) => b.price - a.price)
+    if (sort === 'relevance')
+      list.sort((a, b) =>
+        a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' })
+      )
 
     return list
   }, [q, category, brand, inStockOnly, maxPrice, sort])
@@ -146,35 +498,35 @@ export default function ProdutosDetalhes() {
     <ProdutosD className="py-3">
       {/* Título + botão de filtros no mobile */}
       <div className="container">
-        <h1 className="text-center">
-          Catálogo de <span>Produtos</span>
-        </h1>
-        <div className="mb-3 text-end botao">
+        <div className="mb-3 d-flex justify-content-center align-items-center gap-2">
           <button
             className="btn btn-outline-success d-lg-none"
             data-bs-toggle="offcanvas"
             data-bs-target="#filtrosOffcanvas"
             aria-controls="filtrosOffcanvas"
           >
-            Filtros
+            <FontAwesomeIcon icon={faFilter} />
           </button>
+          <div
+            className={`search-input ${q ? 'has-value' : ''} flex-grow-1`}
+            style={{ maxWidth: 520 }}
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
+            <input
+              type="text"
+              className="form-control p-2 w-100"
+              placeholder="        Buscar"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="row mt-md-5">
+        <div className="row mt-md-4">
           {/* === Sidebar (desktop) === */}
           <aside className="col-lg-3 d-none d-lg-block">
             <div className="card border-0 shadow-sm sidebar-sticky">
               <div className="card-body">
                 <h5 className="mb-3">Filtros</h5>
-                <div className="mb-3">
-                  <label className="form-label">Buscar</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Ex.: amaciante, lava roupas..."
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                  />
-                </div>
                 <div className="mb-3">
                   <label className="form-label">Categoria</label>
                   <select
@@ -270,16 +622,6 @@ export default function ProdutosDetalhes() {
               ></button>
             </div>
             <div className="offcanvas-body">
-              <div className="mb-3">
-                <label className="form-label">Buscar</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Ex.: amaciante, lava roupas..."
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                />
-              </div>
               <div className="mb-3">
                 <label className="form-label">Categoria</label>
                 <select
@@ -384,24 +726,26 @@ export default function ProdutosDetalhes() {
                             ''
                           )
                           return (
-                            <picture>
-                              <source
-                                type="image/avif"
-                                srcSet={`${base}.avif`}
-                              />
-                              <source
-                                type="image/webp"
-                                srcSet={`${base}.webp`}
-                              />
-                              <img
-                                src={`${base}.webp`}
-                                alt={p.title}
-                                className="card-img-top object-fit-contain p-2"
-                                width={800}
-                                height={800}
-                                loading="lazy"
-                              />
-                            </picture>
+                            <div className="d-flex justify-content-center">
+                              <picture>
+                                <source
+                                  type="image/avif"
+                                  srcSet={`${base}.avif`}
+                                />
+                                <source
+                                  type="image/webp"
+                                  srcSet={`${base}.webp`}
+                                />
+                                <img
+                                  src={`${base}.webp`}
+                                  alt={p.title}
+                                  className="card-img-top p-2"
+                                  width={800}
+                                  height={800}
+                                  loading="lazy"
+                                />
+                              </picture>
+                            </div>
                           )
                         })()}
                       </div>

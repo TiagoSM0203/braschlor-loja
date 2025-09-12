@@ -27,6 +27,9 @@ export const GlobalCss = createGlobalStyle`
     color: ${cores.pretoSuave};
   }
 
+  /* Rolagem suave para links de âncora como #contato */
+  html { scroll-behavior: smooth; }
+
   .container {
     max-width: 1024px;
     width: 100%;
@@ -80,7 +83,7 @@ export const GlobalCss = createGlobalStyle`
 
 /* Quando em foco (quando clica nele ou navega com TAB) */
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.25rem rgba(0, 168, 89, 0.25); /* sombra verde suave */
+  box-shadow: 0 0 0 0.10rem rgba(0, 168, 89, 0.25); /* sombra verde suave */
   border-color: ${cores.verdeClaro};
 }
 
@@ -89,13 +92,13 @@ export const GlobalCss = createGlobalStyle`
   /* Bootstrap 5 usa essas vars no foco */
   outline: none;
   border-color: ${cores.verdeClaro} !important;
-  box-shadow: 0 0 0 0.25rem rgba(0, 168, 89, 0.25) !important;
+  box-shadow: 0 0 0 0.10rem rgba(0, 168, 89, 0.25) !important;
 }
 
 .form-control:focus {
   outline: none;
   border-color: ${cores.verdeClaro} !important;
-  box-shadow: 0 0 0 0.25rem rgba(0, 168, 89, 0.25) !important;
+  box-shadow: 0 0 0 0.10rem rgba(0, 168, 89, 0.25) !important;
 }
 
 /* Sidebar sticky sempre começa logo abaixo do header */

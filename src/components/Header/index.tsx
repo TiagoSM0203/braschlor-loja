@@ -81,22 +81,17 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#sobre">
-                  Sobre Nós
-                </a>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/#marcas">
-                  Marcas
-                </Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link" to="/produtos">
                   Produtos
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contato">
+                <Link className="nav-link" to="/seja-parceiro">
+                  Seja Parceiro
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/#contato">
                   Contato
                 </Link>
               </li>
