@@ -61,4 +61,21 @@ export const ProdutoWrapper = styled.div`
   .accordion-body p {
     margin-bottom: 0.75rem;
   }
+
+  /* Correção: garante que o filho direto de .ratio (div wrapper) ocupe 100% */
+  .ratio > * {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ratio picture,
+  .ratio img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .ratio img {
+    display: block;
+  }
 `
