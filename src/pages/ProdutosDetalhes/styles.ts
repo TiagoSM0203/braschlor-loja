@@ -31,29 +31,23 @@ export const ProdutosD = styled.div`
     padding-left: 0.75rem;
   }
 
-  /* Evita esticar e garante preenchimento correto no ratio 1x1 */
+  /* Evita que imagens estourem dos cards (ratio 1x1) */
   .card .ratio {
     overflow: hidden;
   }
-  /* O primeiro filho direto do .ratio no markup atual é uma <div> wrapper. */
-  .card .ratio > * {
+  .card .ratio > picture,
+  .card .ratio > img {
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
   }
-  .card .ratio picture,
   .card .ratio img {
     max-width: 100%;
     max-height: 100%;
-  }
-  .card .ratio img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* evita esticar a imagem */
+    object-fit: contain; /* evita esticar a imagem em iOS/Safari */
     object-position: center;
     border-radius: 16px;
-    display: block;
   }
 `

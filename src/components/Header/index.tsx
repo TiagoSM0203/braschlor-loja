@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { useCart } from '../../contexts/CardContext'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
   const ref = useRef<HTMLElement>(null)
   const { count } = useCart()
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 0)
@@ -59,17 +61,32 @@ const Header = () => {
           </picture>
         </Link>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarMain"
-          aria-controls="navbarMain"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        <div className="d-flex justify-content-center align-items-center">
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMain"
+            aria-controls="navbarMain"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          {/* Carrinho sempre visível no mobile */}
+          <div className="d-lg-none ms-2">
+            <Link to="/carrinho" className="nav-link p-0">
+              <div className="card-carrinho d-flex align-items-center">
+                <FontAwesomeIcon icon={faShoppingCart} />
+                {count > 0 && (
+                  <div className="carrinho-number">
+                    <span>{count}</span>
+                  </div>
+                )}
+              </div>
+            </Link>
+          </div>
+        </div>
 
         {/* Menu colapsável */}
         <div className="collapse navbar-collapse" id="navbarMain">
@@ -100,11 +117,15 @@ const Header = () => {
 
           <ul className="navbar-nav ms-lg-auto align-items-center gap-2">
             <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                Login
+              <Link
+                to={isAuthenticated ? '/perfil' : '/login'}
+                className="nav-link"
+              >
+                {isAuthenticated ? 'Seu Perfil' : 'Login'}
               </Link>
             </li>
-            <li className="nav-item">
+            {/* Carrinho visível em telas grandes dentro do menu */}
+            <li className="nav-item d-none d-lg-block">
               <Link to="/carrinho" className="nav-link p-0">
                 <div className="card-carrinho d-flex align-items-center">
                   <FontAwesomeIcon icon={faShoppingCart} />

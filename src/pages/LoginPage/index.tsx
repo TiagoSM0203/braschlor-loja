@@ -1,7 +1,9 @@
 // src/pages/LoginPage/index.tsx
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Form } from 'react-bootstrap'
+import { useAuth } from '../../contexts/AuthContext'
+import { useToast } from '../../contexts/ToastContext'
 import {
   LoginWrapper,
   LoginCard,
@@ -12,23 +14,54 @@ import {
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const { login, register } = useAuth()
+  const { notify } = useToast()
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setTimeout(() => {
+    const form = e.target as HTMLFormElement
+    const fd = new FormData(form)
+    const email = String(fd.get('email') || '')
+    const password = String(fd.get('password') || '')
+    if (!email || !password) return
+    try {
+      setIsLoading(true)
+      await login(email, password)
+      notify('Login realizado com sucesso', {
+        type: 'success',
+      })
+      navigate('/perfil')
+    } catch (err: any) {
+      notify(err?.message || 'Falha no login', { type: 'error' })
+    } finally {
       setIsLoading(false)
-      alert('Login realizado com sucesso!')
-    }, 1500)
+    }
   }
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setTimeout(() => {
+    const form = e.target as HTMLFormElement
+    const fd = new FormData(form)
+    const fullName = String(fd.get('reg_full_name') || '')
+    const email = String(fd.get('reg_email') || '')
+    const password = String(fd.get('reg_password') || '')
+    if (!fullName || !email || !password) return
+    try {
+      setIsLoading(true)
+      await register({ email, password, fullName })
+      notify('Cadastro realizado! Verifique seu email se necessário.', {
+        type: 'success',
+      })
+      // Se a sessão já estiver ativa, vai redirecionar corretamente
+      navigate('/perfil')
+    } catch (err: any) {
+      notify(err?.message || 'Falha no cadastro', {
+        type: 'error',
+      })
+    } finally {
       setIsLoading(false)
-      alert('Cadastro realizado com sucesso!')
-    }, 1500)
+    }
   }
 
   // ---------- MÁSCARAS ----------
@@ -94,6 +127,7 @@ export default function LoginPage() {
               <Form.Control
                 type="email"
                 placeholder="seuemail@exemplo.com"
+                name="email"
                 required
               />
             </Form.Group>
@@ -103,6 +137,7 @@ export default function LoginPage() {
               <Form.Control
                 type="password"
                 placeholder="Digite sua senha"
+                name="password"
                 required
               />
             </Form.Group>
@@ -135,6 +170,7 @@ export default function LoginPage() {
               <Form.Control
                 type="text"
                 placeholder="Digite seu nome"
+                name="reg_full_name"
                 required
               />
             </Form.Group>
@@ -283,6 +319,7 @@ export default function LoginPage() {
               <Form.Control
                 type="email"
                 placeholder="seuemail@exemplo.com"
+                name="reg_email"
                 required
               />
             </Form.Group>
@@ -292,6 +329,7 @@ export default function LoginPage() {
               <Form.Control
                 type="password"
                 placeholder="Crie uma senha"
+                name="reg_password"
                 required
               />
             </Form.Group>

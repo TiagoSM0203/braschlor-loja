@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { Carousel, Row, Col, Button } from 'react-bootstrap'
 import { ImagensP, Products, Produto } from './styles'
 import { useCart } from '../../contexts/CardContext'
+import { useToast } from '../../contexts/ToastContext'
 import { useNavigate } from 'react-router-dom'
 
 // imagens servidas de public/imgs
@@ -143,6 +144,7 @@ const Produtos = () => {
   ]
 
   const { addItem } = useCart()
+  const { notify } = useToast()
   const navigate = useNavigate()
 
   const slides = useMemo(
@@ -231,6 +233,9 @@ const Produtos = () => {
                             },
                             1
                           )
+                          notify('Item adicionado ao carrinho', {
+                            type: 'success',
+                          })
                         }}
                       >
                         Adicionar ao Carrinho

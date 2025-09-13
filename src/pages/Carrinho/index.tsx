@@ -36,7 +36,7 @@ export default function Carrinho() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="d-flex align-items-center gap-3 py-3 border-bottom"
+                  className="d-flex align-items-center gap-3 py-3 border-bottom cart-item"
                 >
                   <img
                     src={item.img}
@@ -45,12 +45,12 @@ export default function Carrinho() {
                     height={72}
                     style={{ objectFit: 'contain' }}
                   />
-                  <div className="flex-grow-1">
+                  <div className="flex-grow-1 cart-title">
                     <div className="fw-semibold">{item.title}</div>
                     <div className="text-success">{formatBRL(item.price)}</div>
                   </div>
 
-                  <div className="d-flex align-items-center gap-2">
+                  <div className="d-flex align-items-center gap-2 cart-qty">
                     <button
                       className="btn btn-outline-success btn-sm"
                       onClick={() => updateQty(item.id, item.qty - 1)}
@@ -77,7 +77,7 @@ export default function Carrinho() {
                     </button>
                   </div>
 
-                  <div className="text-end" style={{ width: 120 }}>
+                  <div className="text-end cart-total" style={{ width: 120 }}>
                     <div className="fw-semibold">
                       {formatBRL(item.price * item.qty)}
                     </div>

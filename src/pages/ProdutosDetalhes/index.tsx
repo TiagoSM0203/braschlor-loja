@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ProdutosD } from './styles'
 import { useCart } from '../../contexts/CardContext'
+import { useToast } from '../../contexts/ToastContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
@@ -494,6 +495,8 @@ export default function ProdutosDetalhes() {
     setSort('relevance')
   }
 
+  const { notify } = useToast()
+
   return (
     <ProdutosD className="py-3">
       {/* Título + botão de filtros no mobile */}
@@ -740,8 +743,6 @@ export default function ProdutosDetalhes() {
                                   src={`${base}.webp`}
                                   alt={p.title}
                                   className="card-img-top p-2"
-                                  width={800}
-                                  height={800}
                                   loading="lazy"
                                 />
                               </picture>
@@ -786,6 +787,9 @@ export default function ProdutosDetalhes() {
                                   },
                                   1
                                 )
+                                notify('Item adicionado ao carrinho', {
+                                  type: 'success',
+                                })
                               }}
                             >
                               Adicionar

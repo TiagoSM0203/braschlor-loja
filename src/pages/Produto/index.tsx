@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { PRODUCTS } from '../../data/products'
 import { useCart } from '../../contexts/CardContext'
+import { useToast } from '../../contexts/ToastContext'
 import { Button, Accordion, Form } from 'react-bootstrap'
 import { useState, useMemo } from 'react'
 import { ProdutoWrapper } from './styles'
@@ -16,6 +17,7 @@ export default function ProdutoPage() {
     [productId]
   )
   const { addItem } = useCart()
+  const { notify } = useToast()
   const [qty, setQty] = useState(1)
 
   const renderText = (text: string) => {
@@ -77,8 +79,6 @@ export default function ProdutoPage() {
                         src={`${base}.webp`}
                         alt={product.alt ?? product.title}
                         className="p-2"
-                        width={800}
-                        height={800}
                         loading="lazy"
                       />
                     </picture>
@@ -115,7 +115,7 @@ export default function ProdutoPage() {
             <div className="d-flex gap-2 mb-4">
               <Button
                 variant="success"
-                onClick={() =>
+                onClick={() => {
                   addItem(
                     {
                       id: product.id,
@@ -125,7 +125,8 @@ export default function ProdutoPage() {
                     },
                     qty
                   )
-                }
+                  notify('Item adicionado ao carrinho', { type: 'success' })
+                }}
               >
                 Adicionar ao carrinho
               </Button>

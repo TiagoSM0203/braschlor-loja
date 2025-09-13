@@ -3,7 +3,7 @@ import { cores } from '../../styles'
 
 export const Contatos = styled.div`
   /* Faz o alvo "#contato" encaixar abaixo do header fixo ao navegar por âncora */
-  scroll-margin-top: calc(var(--header-h) + var(--header-gap));
+  scroll-margin-top: calc(var(--header-h) + var(--header-gap) + 16px);
   /* Garante que a seção ocupe ao menos a altura visível menos o header */
   min-height: calc(100vh - var(--header-h) - var(--header-gap));
   background: linear-gradient(to right, ${cores.verde}, ${cores.verdeEscuro});
