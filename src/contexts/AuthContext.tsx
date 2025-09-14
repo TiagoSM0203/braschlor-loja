@@ -30,37 +30,6 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
-  async function getHCaptchaToken(): Promise<string | undefined> {
-    const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
-    if (!siteKey) return undefined
-    const anyWin = window as any
-    // aguarda o script carregar
-    const started = Date.now()
-    while (!anyWin.hcaptcha && Date.now() - started < 5000) {
-      await new Promise((r) => setTimeout(r, 50))
-    }
-    if (!anyWin.hcaptcha) return undefined
-    try {
-      // Cria um widget invisível e executa
-      if (!anyWin.__hcwid) {
-        const el = document.createElement('div')
-        el.id = 'hcaptcha-invisible'
-        el.style.display = 'none'
-        document.body.appendChild(el)
-        anyWin.__hcwid = anyWin.hcaptcha.render('hcaptcha-invisible', {
-          sitekey: siteKey,
-          size: 'invisible',
-        })
-      }
-      const token: string = await anyWin.hcaptcha.execute(anyWin.__hcwid, {
-        async: true,
-      })
-      return token
-    } catch (e) {
-      return undefined
-    }
-  }
-
   async function fetchProfile(userId: string) {
     const { data } = await supabase
       .from('profiles')
@@ -121,14 +90,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const login: AuthContextType['login'] = async (email, password) => {
-    const captchaToken = await getHCaptchaToken()
-
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-      options: captchaToken ? { captchaToken } : undefined,
+      // sem captcha
     })
     if (error) throw error
     const u = data.user
@@ -145,22 +111,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const register: AuthContextType['register'] = async ({
     email,
     password,
     fullName,
   }) => {
     const redirectTo = `${window.location.origin}/perfil`
-    const captchaToken = await getHCaptchaToken()
-
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectTo,
         data: { full_name: fullName },
-        ...(captchaToken ? { captchaToken } : {}),
       },
     })
     if (error) throw error
