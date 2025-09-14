@@ -30,6 +30,37 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
+  async function getHCaptchaToken(): Promise<string | undefined> {
+    const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
+    if (!siteKey) return undefined
+    const anyWin = window as any
+    // aguarda o script carregar
+    const started = Date.now()
+    while (!anyWin.hcaptcha && Date.now() - started < 5000) {
+      await new Promise((r) => setTimeout(r, 50))
+    }
+    if (!anyWin.hcaptcha) return undefined
+    try {
+      // Cria um widget invisível e executa
+      if (!anyWin.__hcwid) {
+        const el = document.createElement('div')
+        el.id = 'hcaptcha-invisible'
+        el.style.display = 'none'
+        document.body.appendChild(el)
+        anyWin.__hcwid = anyWin.hcaptcha.render('hcaptcha-invisible', {
+          sitekey: siteKey,
+          size: 'invisible',
+        })
+      }
+      const token: string = await anyWin.hcaptcha.execute(anyWin.__hcwid, {
+        async: true,
+      })
+      return token
+    } catch (e) {
+      return undefined
+    }
+  }
+
   async function fetchProfile(userId: string) {
     const { data } = await supabase
       .from('profiles')
@@ -92,17 +123,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const login: AuthContextType['login'] = async (email, password) => {
-    let captchaToken: string | undefined
-    try {
-      const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
-      const anyWin = window as any
-      if (siteKey && anyWin.hcaptcha?.execute) {
-        captchaToken = await anyWin.hcaptcha.execute(siteKey, { async: true })
-      }
-    } catch (e) {
-      // opcional: log leve em dev
-      // console.warn('hCaptcha execute falhou', e)
-    }
+    const captchaToken = await getHCaptchaToken()
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -131,17 +152,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fullName,
   }) => {
     const redirectTo = `${window.location.origin}/perfil`
-    let captchaToken: string | undefined
-    try {
-      const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
-      const anyWin = window as any
-      if (siteKey && anyWin.hcaptcha?.execute) {
-        captchaToken = await anyWin.hcaptcha.execute(siteKey, { async: true })
-      }
-    } catch (e) {
-      // opcional: log leve em dev
-      // console.warn('hCaptcha execute falhou', e)
-    }
+    const captchaToken = await getHCaptchaToken()
 
     const { data, error } = await supabase.auth.signUp({
       email,
