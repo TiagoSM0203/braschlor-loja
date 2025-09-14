@@ -16,6 +16,8 @@ const Carrinho = lazy(() => import('./pages/Carrinho'))
 const SejaParceiro = lazy(() => import('./pages/SejaParceiro'))
 const ProdutoPage = lazy(() => import('./pages/Produto'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+const PedidoPage = lazy(() => import('./pages/Pedido/index'))
+const VerifiqueEmailPage = lazy(() => import('./pages/VerifiqueEmail/index'))
 const PerfilPage = lazy(() => import('./pages/Perfil'))
 
 export default function App() {
@@ -36,6 +38,11 @@ export default function App() {
                 <Route path="/perfil" element={<PerfilPage />} />
                 <Route path="/produtos" element={<ProdutosDetalhes />} />
                 <Route path="/produto/:id" element={<ProdutoPage />} />
+                <Route path="/pedido/:id" element={<PedidoPage />} />
+                <Route
+                  path="/verifique-email"
+                  element={<VerifiqueEmailPage />}
+                />
                 <Route path="/carrinho" element={<Carrinho />} />
                 <Route path="/seja-parceiro" element={<SejaParceiro />} />
               </Routes>

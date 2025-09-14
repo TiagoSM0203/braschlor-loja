@@ -1,13 +1,21 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useCart } from '../../contexts/CardContext'
 import { Link } from 'react-router-dom'
 import { CarrinhoP } from './styles'
+import { supabase } from '../../lib/supabase'
+import { useToast } from '../../contexts/ToastContext'
+import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const formatBRL = (v: number) =>
   v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
 export default function Carrinho() {
   const { items, total, updateQty, removeItem, clear } = useCart()
+  const { notify } = useToast()
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const frete = 0 // adapte se precisar
   const subtotal = total
@@ -125,9 +133,49 @@ export default function Carrinho() {
               </div>
               <button
                 className="btn btn-success w-100 mt-3"
-                onClick={() => alert('Finalizar compra')}
+                onClick={async () => {
+                  if (!items.length) return
+                  if (!isAuthenticated) {
+                    notify('Faça login para finalizar a compra', {
+                      type: 'info',
+                    })
+                    navigate('/login')
+                    return
+                  }
+
+                  try {
+                    setIsSubmitting(true)
+
+                    const p_items = items.map((i) => ({
+                      // Option 1 (server-authoritative): o backend busca o preço.
+                      // Enviamos apenas product_id (int) e quantity.
+                      product_id: i.id,
+                      quantity: i.qty,
+                    }))
+
+                    const { data, error } = await supabase.rpc('create_order', {
+                      p_items,
+                    })
+                    if (error) throw error
+
+                    const orderId = String(data)
+                    const code = orderId.slice(0, 8)
+                    notify(`Pedido ${code} criado com sucesso!`, {
+                      type: 'success',
+                    })
+                    clear()
+                    navigate(`/pedido/${orderId}`)
+                  } catch (err) {
+                    const msg =
+                      err instanceof Error ? err.message : 'Falha ao finalizar'
+                    notify(msg, { type: 'error' })
+                  } finally {
+                    setIsSubmitting(false)
+                  }
+                }}
+                disabled={isSubmitting}
               >
-                Finalizar compra
+                {isSubmitting ? 'Processando…' : 'Finalizar compra'}
               </button>
             </div>
           </div>

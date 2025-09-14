@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           id: s.user.id,
           name:
             fullName ||
-            (s.user.user_metadata as any)?.full_name ||
+            (s.user.user_metadata as { full_name?: string })?.full_name ||
             s.user.email?.split('@')[0] ||
             'Cliente',
           email: s.user.email || '',
@@ -74,7 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             id: session.user.id,
             name:
               fullName ||
-              (session.user.user_metadata as any)?.full_name ||
+              (session.user.user_metadata as { full_name?: string })
+                ?.full_name ||
               session.user.email?.split('@')[0] ||
               'Cliente',
             email: session.user.email || '',
@@ -89,6 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const login: AuthContextType['login'] = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -102,22 +104,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: u.id,
       name:
         fullName ||
-        (u.user_metadata as any)?.full_name ||
+        (u.user_metadata as { full_name?: string })?.full_name ||
         u.email?.split('@')[0] ||
         'Cliente',
       email: u.email || '',
     })
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const register: AuthContextType['register'] = async ({
     email,
     password,
     fullName,
   }) => {
+    const redirectTo = `${window.location.origin}/perfil`
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: { emailRedirectTo: redirectTo, data: { full_name: fullName } },
     })
     if (error) throw error
     const u = data.user
@@ -137,7 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo(
     () => ({ user, isAuthenticated: !!user, login, register, logout }),
-    [user]
+    [login, register, user]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

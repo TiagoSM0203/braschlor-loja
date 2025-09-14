@@ -28,12 +28,25 @@ export default function LoginPage() {
     try {
       setIsLoading(true)
       await login(email, password)
-      notify('Login realizado com sucesso', {
-        type: 'success',
+      // Checa confirmação de e-mail
+      const { supabase } = await import('../../lib/supabase')
+      const { data } = await supabase.auth.getUser()
+      const confirmed = Boolean(data.user?.email_confirmed_at)
+      if (!confirmed) {
+        notify('Conta criada. Verifique seu e-mail para confirmar.', {
+          type: 'info',
+        })
+        navigate('/verifique-email')
+      } else {
+        notify('Login realizado com sucesso', {
+          type: 'success',
+        })
+        navigate('/perfil')
+      }
+    } catch (err: unknown) {
+      notify(err instanceof Error ? err.message : 'Falha no login', {
+        type: 'error',
       })
-      navigate('/perfil')
-    } catch (err: any) {
-      notify(err?.message || 'Falha no login', { type: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -55,8 +68,8 @@ export default function LoginPage() {
       })
       // Se a sessão já estiver ativa, vai redirecionar corretamente
       navigate('/perfil')
-    } catch (err: any) {
-      notify(err?.message || 'Falha no cadastro', {
+    } catch (err: unknown) {
+      notify(err instanceof Error ? err.message : 'Falha no cadastro', {
         type: 'error',
       })
     } finally {
