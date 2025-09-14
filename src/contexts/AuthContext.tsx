@@ -92,9 +92,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const login: AuthContextType['login'] = async (email, password) => {
+    let captchaToken: string | undefined
+    try {
+      const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
+      const anyWin = window as any
+      if (siteKey && anyWin.hcaptcha?.execute) {
+        captchaToken = await anyWin.hcaptcha.execute(siteKey, { async: true })
+      }
+    } catch (e) {
+      // opcional: log leve em dev
+      // console.warn('hCaptcha execute falhou', e)
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: captchaToken ? { captchaToken } : undefined,
     })
     if (error) throw error
     const u = data.user
@@ -118,10 +131,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fullName,
   }) => {
     const redirectTo = `${window.location.origin}/perfil`
+    let captchaToken: string | undefined
+    try {
+      const siteKey = process.env.REACT_APP_HCAPTCHA_SITEKEY
+      const anyWin = window as any
+      if (siteKey && anyWin.hcaptcha?.execute) {
+        captchaToken = await anyWin.hcaptcha.execute(siteKey, { async: true })
+      }
+    } catch (e) {
+      // opcional: log leve em dev
+      // console.warn('hCaptcha execute falhou', e)
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: redirectTo, data: { full_name: fullName } },
+      options: {
+        emailRedirectTo: redirectTo,
+        data: { full_name: fullName },
+        ...(captchaToken ? { captchaToken } : {}),
+      },
     })
     if (error) throw error
     const u = data.user
