@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
-import { supabase } from '../../lib/supabase'
 
 type Order = {
   id: string
   total_cents?: number
   status?: string
+  items?: OrderItem[]
+}
+
+type OrderItem = {
+  product_id: number | string
+  quantity: number
+  unit_price_cents: number
+  product_title?: string | null
 }
 
 export default function PedidoPage() {
@@ -17,24 +24,22 @@ export default function PedidoPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [items, setItems] = useState<OrderItem[]>([])
 
   useEffect(() => {
     if (!isAuthenticated) navigate('/login')
   }, [isAuthenticated, navigate])
 
   useEffect(() => {
-    async function fetchOrder() {
+    function fetchOrderLocal() {
       if (!id) return
       try {
         setLoading(true)
-        // Busca mínima do pedido (se a tabela existir e RLS permitir leitura do próprio pedido)
-        const { data, error } = await supabase
-          .from('orders')
-          .select('id, total_cents, status')
-          .eq('id', id)
-          .maybeSingle()
-        if (error) throw error
-        setOrder(data as Order)
+        const raw = localStorage.getItem('orders:v1')
+        const store = raw ? (JSON.parse(raw) as Order[]) : []
+        const found = store.find((o) => o.id === id) || null
+        setOrder(found)
+        setItems(found?.items || [])
       } catch (e: unknown) {
         if (e instanceof Error) {
           setError(e.message)
@@ -45,10 +50,17 @@ export default function PedidoPage() {
         setLoading(false)
       }
     }
-    fetchOrder()
+    fetchOrderLocal()
   }, [id])
 
   const code = id ? id.slice(0, 8) : ''
+  const formatBRL = (cents?: number) =>
+    typeof cents === 'number'
+      ? (cents / 100).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })
+      : ''
   return (
     <div className="container" style={{ marginTop: '13vh' }}>
       <div className="row justify-content-center">
@@ -73,6 +85,32 @@ export default function PedidoPage() {
                   )}
                   {order?.status && (
                     <p className="text-muted small">Status: {order.status}</p>
+                  )}
+                  {items.length > 0 && (
+                    <div className="mt-3">
+                      <h6 className="mb-2">Itens do pedido</h6>
+                      <div className="list-group">
+                        {items.map((it, idx) => (
+                          <div
+                            key={idx}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                          >
+                            <div>
+                              <div className="fw-semibold">
+                                {it.product_title ||
+                                  `Produto ${String(it.product_id)}`}
+                              </div>
+                              <div className="small text-muted">
+                                {it.quantity} x {formatBRL(it.unit_price_cents)}
+                              </div>
+                            </div>
+                            <div className="fw-semibold">
+                              {formatBRL(it.quantity * it.unit_price_cents)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </>
               )}

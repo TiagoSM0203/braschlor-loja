@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useCart } from '../../contexts/CardContext'
 import { Link } from 'react-router-dom'
 import { CarrinhoP } from './styles'
-import { supabase } from '../../lib/supabase'
 import { useToast } from '../../contexts/ToastContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -145,20 +144,30 @@ export default function Carrinho() {
 
                   try {
                     setIsSubmitting(true)
-
-                    const p_items = items.map((i) => ({
-                      // Option 1 (server-authoritative): o backend busca o preço.
-                      // Enviamos apenas product_id (int) e quantity.
-                      product_id: i.id,
-                      quantity: i.qty,
-                    }))
-
-                    const { data, error } = await supabase.rpc('create_order', {
-                      p_items,
-                    })
-                    if (error) throw error
-
-                    const orderId = String(data)
+                    // Frontend-only: gera pedido local e persiste em localStorage
+                    const orderId = `ord-${Date.now().toString(36)}${Math.floor(
+                      Math.random() * 1e6
+                    ).toString(36)}`
+                    const order = {
+                      id: orderId,
+                      total_cents: Math.round(totalGeral * 100),
+                      status: 'CRIADO',
+                      items: items.map((i) => ({
+                        product_id: i.id,
+                        quantity: i.qty,
+                        unit_price_cents: Math.round(i.price * 100),
+                        product_title: i.title,
+                      })),
+                    }
+                    try {
+                      const raw = localStorage.getItem('orders:v1')
+                      const store = raw ? (JSON.parse(raw) as any[]) : []
+                      store.unshift(order)
+                      localStorage.setItem('orders:v1', JSON.stringify(store))
+                    } catch (e) {
+                      // Se falhar parsing/salvamento, cria storage do zero
+                      localStorage.setItem('orders:v1', JSON.stringify([order]))
+                    }
                     const code = orderId.slice(0, 8)
                     notify(`Pedido ${code} criado com sucesso!`, {
                       type: 'success',
